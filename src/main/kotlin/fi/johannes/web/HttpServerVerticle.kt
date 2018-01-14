@@ -1,22 +1,24 @@
 package fi.johannes.web
 
 import com.github.salomonbrys.kodein.*
+import fi.johannes.data.services.proxy.BackupService
 import fi.johannes.web.handlers.RepositoryControllers
 import fi.johannes.web.handlers.repository.RepositoryController
+import fi.johannes.web.handlers.status.StatusController
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
-import io.vertx.core.eventbus.EventBus
 import io.vertx.core.logging.Logger
 import io.vertx.ext.web.Router
+import io.vertx.serviceproxy.ServiceProxyBuilder
 
 /**
  * Johannes on 14.1.2018.
  */
-class HttpServerVerticle:AbstractVerticle() {
+class HttpServerVerticle : AbstractVerticle() {
 
     companion object {
         val CONFIG_HTTP_SERVER_PORT = "web.server.port"
-        val CONFIG_BACKUP_QUEUE = "backup.queue"
+        val CONFIG_BACKUPS_QUEUE = "backup.queue"
     }
 
     private val logger: Logger by lazy {
@@ -24,17 +26,16 @@ class HttpServerVerticle:AbstractVerticle() {
     }
 
     private val backupQueueAddress by lazy {
-        config().getString(CONFIG_BACKUP_QUEUE, "wikidb.queue")
+        config().getString(CONFIG_BACKUPS_QUEUE, "wikidb.queue")
     }
 
     private val backupEventBus by lazy {
         vertx.eventBus()
     }
 
-    val httpModule by lazy {
+    val modules by lazy {
         Kodein {
-            bind<EventBus>("backupEventBus") with singleton { backupEventBus }
-            constant("backupQueueAddress") with backupQueueAddress
+
         }
     }
 
@@ -63,14 +64,22 @@ class HttpServerVerticle:AbstractVerticle() {
         super.stop(stopFuture)
     }
 
+    private fun getBackupService(): BackupService {
+        return ServiceProxyBuilder(vertx)
+                .setAddress(config().getString(CONFIG_BACKUPS_QUEUE, "db.queue"))
+                .build(BackupService::class.java)
+    }
+
     private fun setupRouter(router: Router): Router {
 
-        val controllers = RepositoryControllers(backupQueueAddress, backupEventBus)
+        val controllers = RepositoryControllers(getBackupService())
 
-        // todo could use string tags to even less coupling
         val repositoryController = controllers.injector.instance<RepositoryController>()
-        router.get("/:id/").handler(repositoryController::get);
-        router.get("/save").handler(repositoryController::save);
+        val statusController = controllers.injector.instance<StatusController>()
+
+        router.get("/latest/:title").handler(repositoryController::get);
+        router.post("/save").handler(repositoryController::save);
+        router.get("/service-status").handler(statusController::get);
 
         return router
     }

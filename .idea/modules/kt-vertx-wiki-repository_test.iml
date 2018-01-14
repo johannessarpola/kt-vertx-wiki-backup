@@ -15,10 +15,7 @@
           <option name="languageVersion" value="1.2" />
           <option name="apiVersion" value="1.2" />
           <option name="pluginOptions">
-            <array>
-              <option value="plugin:org.jetbrains.kotlin.kapt:output=I:\Programming\Kotlin\kt-vertx-wiki-repo\build\tmp\kapt\test\wrappers\annotations.test.txt" />
-              <option value="plugin:org.jetbrains.kotlin.kapt:inherited=true" />
-            </array>
+            <array />
           </option>
           <option name="pluginClasspaths">
             <array />
@@ -30,6 +27,12 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output-test url="file://$MODULE_DIR$/../../out/test/classes" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../build/generated/source/kapt/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/source/kapt/test" isTestSource="true" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../build/generated/source/kaptKotlin/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/source/kaptKotlin/test" isTestSource="true" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/kotlin" isTestSource="true" />

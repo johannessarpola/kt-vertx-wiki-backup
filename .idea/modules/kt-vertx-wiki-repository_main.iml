@@ -41,18 +41,14 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.10" level="project" />
-    <orderEntry type="library" name="Gradle: io.vertx:vertx-web-templ-freemarker:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-web:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-service-proxy:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-lang-kotlin:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-lang-kotlin-coroutines:3.5.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.vertx:vertx-web-client:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-auth-common:3.5.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.vertx:vertx-web-common:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-core:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-codegen:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-jdbc-client:3.5.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.rjeschke:txtmark:0.13" level="project" />
     <orderEntry type="library" name="Gradle: com.github.salomonbrys.kodein:kodein:4.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.hsqldb:hsqldb:2.3.4" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.10" level="project" />
@@ -77,7 +73,6 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.0" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.0" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-bridge-common:3.5.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.freemarker:freemarker:2.3.23" level="project" />
     <orderEntry type="library" name="Gradle: org.mvel:mvel2:2.3.1.Final" level="project" />
     <orderEntry type="library" name="Gradle: io.vertx:vertx-sql-common:3.5.0" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:c3p0:0.9.5.2" level="project" />

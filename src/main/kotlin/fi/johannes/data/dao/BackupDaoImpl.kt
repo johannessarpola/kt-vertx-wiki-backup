@@ -23,14 +23,16 @@ class BackupDaoImpl(val sqlClient: SQLClient) : BackupDao {
 
     private val getLatest = """
         SELECT Id, Title, Filename
-        FROM Backups INNER JOIN(
+        FROM Backups
+        INNER JOIN(
             SELECT  Title as tt,
                     MAX(CreatedAt) as mx
             FROM Backups
             WHERE Backups.Title = ?
-            GROUP BY Title) mxdts
-        ON Backups.Title = mxdt.tt
-            AND Backups.CreatedAt = mxdt.mx
+            GROUP BY Title
+            ) maxDates
+        ON Backups.Title = maxDates.tt
+            AND Backups.CreatedAt = maxDates.mx
         """
 
     private fun fetchHandler(res: AsyncResult<ResultSet>,

@@ -9,6 +9,7 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.logging.Logger
 import io.vertx.ext.web.Router
+import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.serviceproxy.ServiceProxyBuilder
 
 /**
@@ -77,9 +78,10 @@ class HttpServerVerticle : AbstractVerticle() {
         val repositoryController = controllers.injector.instance<RepositoryController>()
         val statusController = controllers.injector.instance<StatusController>()
 
-        router.get("/latest/:title").handler(repositoryController::get);
-        router.post("/save").handler(repositoryController::save);
-        router.get("/service-status").handler(statusController::get);
+        router.get("/backups/latest/:title").handler(repositoryController::get)
+        router.get("/backups/service-status").handler(statusController::get)
+        router.post().handler(BodyHandler.create())
+        router.post("/backups/save").handler(repositoryController::save)
 
         return router
     }

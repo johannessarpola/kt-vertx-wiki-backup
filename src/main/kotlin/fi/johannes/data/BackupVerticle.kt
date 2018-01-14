@@ -70,7 +70,7 @@ class BackupVerticle:AbstractVerticle() {
 
 
     override fun stop(stopFuture: Future<Void>) {
-        super.stop(stopFuture)
+        dbClient.close()
     }
 
     // todo save to disk

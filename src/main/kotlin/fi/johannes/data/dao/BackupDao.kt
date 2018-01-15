@@ -8,5 +8,6 @@ import io.vertx.ext.sql.ResultSet
  */
 interface BackupDao {
     fun createTable(success: () -> Unit, connectionError: (Throwable) -> Unit, createError: (Throwable) -> Unit)
-    fun getLatest(params: JsonArray, success: (ResultSet) -> Unit, error: (Throwable) -> Unit)
+    fun latest(params: JsonArray, success: (ResultSet) -> Unit, error: (Throwable) -> Unit)
+    fun save(params: JsonArray, success: () -> Unit, error: (Throwable) -> Unit)
 }

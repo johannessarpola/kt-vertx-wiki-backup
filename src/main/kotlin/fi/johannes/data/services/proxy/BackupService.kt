@@ -17,4 +17,5 @@ interface BackupService {
     @Fluent
     fun fetchPage(title: String, resultHandler: Handler<AsyncResult<JsonObject>>): BackupService
 
+    fun savePage(title: String, markdown: String, resultHandler: Handler<AsyncResult<JsonObject>>): BackupService
 }

@@ -35,6 +35,10 @@ class BackupDaoImpl(val sqlClient: SQLClient) : BackupDao {
             AND Backups.CreatedAt = maxDates.mx
         """
 
+    private val save = """
+        insert into Backups values (NULL, ?, ?, ?)
+        """
+
     private fun fetchHandler(res: AsyncResult<ResultSet>,
                              success: (ResultSet) -> Unit,
                              error: (Throwable) -> Unit) {
@@ -77,11 +81,20 @@ class BackupDaoImpl(val sqlClient: SQLClient) : BackupDao {
         }
     }
 
-    override fun getLatest(params: JsonArray,
-                           success: (ResultSet) -> Unit,
-                           error: (Throwable) -> Unit) {
+    override fun latest(params: JsonArray,
+                        success: (ResultSet) -> Unit,
+                        error: (Throwable) -> Unit) {
         sqlClient.queryWithParams(getLatest, params, { res ->
             fetchHandler(res, success, error)
+        })
+    }
+
+
+    override fun save(params: JsonArray,
+                      success: () -> Unit,
+                      error: (Throwable) -> Unit) {
+        sqlClient.updateWithParams(save, params, { res ->
+            updateHandler(res, success, error)
         })
     }
 

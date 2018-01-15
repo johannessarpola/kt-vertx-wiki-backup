@@ -78,7 +78,7 @@ class HttpServerVerticle : AbstractVerticle() {
         val repositoryController = controllers.injector.instance<RepositoryController>()
         val statusController = controllers.injector.instance<StatusController>()
 
-        router.get("/backups/latest/:title").handler(repositoryController::get)
+        router.get("/backups/:title/latest/").handler(repositoryController::get)
         router.get("/backups/service-status").handler(statusController::get)
         router.post().handler(BodyHandler.create())
         router.post("/backups/save").handler(repositoryController::save)

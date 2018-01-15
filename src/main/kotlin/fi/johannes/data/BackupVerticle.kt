@@ -3,9 +3,10 @@ package fi.johannes.data
 import com.github.salomonbrys.kodein.*
 import fi.johannes.data.dao.BackupDao
 import fi.johannes.data.dao.BackupDaoImpl
+import fi.johannes.data.io.BackupAsyncIO
+import fi.johannes.data.io.BackupAsyncIOImpl
 import fi.johannes.data.services.proxy.BackupService
 import fi.johannes.data.services.proxy.BackupServiceFactory
-import fi.johannes.data.services.proxy.BackupServiceImpl
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.Handler
@@ -47,14 +48,23 @@ class BackupVerticle:AbstractVerticle() {
             bind<BackupDao>() with singleton {
                 BackupDaoImpl(dbClient)
             }
+            bind<BackupAsyncIO>() with singleton {
+                BackupAsyncIOImpl(
+                        config().getString(CONFIG_BACKUPS_FILE_STORE, "tmp"),
+                        config().getString(CONFIG_BACKUPS_FILE_STORE_FORMAT, "txt")
+                )
+            }
         }
     }
 
     override fun start(startFuture: Future<Void>) {
         logger.info("Starting BackupVerticle")
         val now = System.currentTimeMillis()
+
         val dao:BackupDao =  modules.instance()
-        BackupServiceFactory.createService(dao, Handler { ar ->
+        val bfs: BackupAsyncIO =  modules.instance()
+
+        BackupServiceFactory.createService(bfs, dao, Handler { ar ->
             if(ar.succeeded()) {
                 ServiceBinder(vertx)
                         .setAddress(config().getString(CONFIG_BACKUPS_QUEUE, "db.queue"))

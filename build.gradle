@@ -27,6 +27,7 @@ def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -42,6 +43,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-jdbc-client', version: vertxVersion
     testCompile group: 'io.vertx', name: 'vertx-unit', version: vertxVersion
     compile group: 'com.github.salomonbrys.kodein', name: 'kodein', version: '4.1.0'
+    compile 'org.funktionale:funktionale-all:1.2'
     compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.4'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.2.10'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
@@ -56,7 +58,8 @@ compileTestKotlin {
 }
 
 run {
-    args = ['run', mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+    // redeploy doesn't free the lock on database after shutting down
+    args = ['run', mainVerticleName, "--launcher-class=$mainClassName"] // , "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
 }
 
 // At the moment for non-Android projects you need to explicitly
@@ -66,5 +69,7 @@ idea {
     module {
         sourceDirs += file('build/generated/source/kapt/main')
         generatedSourceDirs += file('build/generated/source/kapt/main')
+        downloadJavadoc = true
+        downloadSources = true
     }
 }

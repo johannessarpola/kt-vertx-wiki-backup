@@ -10,9 +10,9 @@ import io.vertx.ext.sql.UpdateResult
 /**
  * Johannes on 14.1.2018.
  */
-class BackupDaoImpl(val sqlClient: SQLClient) : BackupDao {
+class BackupDAOImpl(val sqlClient: SQLClient) : BackupDAO {
 
-    private val logger = LoggerFactory.getLogger(BackupDaoImpl::class.java)
+    private val logger = LoggerFactory.getLogger(BackupDAOImpl::class.java)
 
     private val createTable = """
         CREATE TABLE IF NOT EXISTS Backups (Id integer identity primary key,

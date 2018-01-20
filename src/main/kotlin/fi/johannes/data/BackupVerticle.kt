@@ -1,10 +1,10 @@
 package fi.johannes.data
 
 import com.github.salomonbrys.kodein.*
-import fi.johannes.data.dao.BackupDao
-import fi.johannes.data.dao.BackupDaoImpl
-import fi.johannes.data.io.BackupAsyncIO
-import fi.johannes.data.io.BackupAsyncIOImpl
+import fi.johannes.data.dao.BackupDAO
+import fi.johannes.data.dao.BackupDAOImpl
+import fi.johannes.data.io.BackupIO
+import fi.johannes.data.io.BackupIOImpl
 import fi.johannes.data.services.proxy.BackupService
 import fi.johannes.data.services.proxy.BackupServiceFactory
 import io.vertx.core.AbstractVerticle
@@ -45,11 +45,11 @@ class BackupVerticle:AbstractVerticle() {
     private val modules by lazy {
         Kodein {
             bind<SQLClient>() with singleton { dbClient }
-            bind<BackupDao>() with singleton {
-                BackupDaoImpl(dbClient)
+            bind<BackupDAO>() with singleton {
+                BackupDAOImpl(dbClient)
             }
-            bind<BackupAsyncIO>() with singleton {
-                BackupAsyncIOImpl(
+            bind<BackupIO>() with singleton {
+                BackupIOImpl(
                         config().getString(CONFIG_BACKUPS_FILE_STORE, "tmp"),
                         config().getString(CONFIG_BACKUPS_FILE_STORE_FORMAT, "txt")
                 )
@@ -61,8 +61,8 @@ class BackupVerticle:AbstractVerticle() {
         logger.info("Starting BackupVerticle")
         val now = System.currentTimeMillis()
 
-        val dao:BackupDao =  modules.instance()
-        val bfs: BackupAsyncIO =  modules.instance()
+        val dao: BackupDAO =  modules.instance()
+        val bfs: BackupIO =  modules.instance()
 
         BackupServiceFactory.createService(bfs, dao, Handler { ar ->
             if(ar.succeeded()) {

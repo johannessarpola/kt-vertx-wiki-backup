@@ -7,9 +7,11 @@ import java.nio.file.Path
 /**
  * Johannes on 15.1.2018.
  */
-interface BackupAsyncIO {
+interface BackupIO {
     fun getBackups(title: String, ready: Handler<AsyncResult<List<Path>>>)
     fun pruneBackups(title: String, numberToKeep: Int, ready: Handler<AsyncResult<Unit>>)
-    fun saveBackup(title: String, content: String, ready: Handler<AsyncResult<Unit>>)
-    fun getBackupForName(title: String, filename: String, ready: Handler<AsyncResult<Path?>>)
+    fun saveBackup(title: String, filename: String, content: String, ready: Handler<AsyncResult<Unit>>)
+    fun getBackupPath(title: String, backupName: String, ready: Handler<AsyncResult<Path?>>)
+    fun getBackupContent(title: String, backupName: String, ready: Handler<AsyncResult<String?>>)
+
 }

@@ -12,7 +12,17 @@ import io.vertx.ext.web.RoutingContext
  */
 class RepositoryControllerImpl(private val components: RepositoryControllerComponents): RepositoryController {
     override fun save(context: RoutingContext) {
-        TODO("Not implemented")
+        val body = context.bodyAsJson
+        components.backupService().savePage(body.getString("title"), body.getString("markdown"), Handler { ar ->
+            if(ar.succeeded()) {
+                context.response()
+                        .putHeader("content-type", "application/json; charset=utf-8")
+                        .end(JsonObject().put("result", "ok").encode())
+            }
+            else {
+                context.fail(ar.cause())
+            }
+        })
     }
 
     override fun get(context: RoutingContext) {

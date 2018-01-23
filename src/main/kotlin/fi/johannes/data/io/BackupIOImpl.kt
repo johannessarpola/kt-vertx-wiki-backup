@@ -42,8 +42,8 @@ class BackupIOImpl(val directory: String,
 
     private fun getFile(title: String, filename: String): Path? {
         val dir = Paths.get(directory, title)
-        return Files.find(dir, 0, BiPredicate { p, attr ->
-            p.fileName.toString().equals(filename)
+        return Files.find(dir, 1, BiPredicate { p, attr ->
+            p.fileName.toString() == "$filename.$fileformat"
         }).findFirst().orNull()
     }
 

@@ -18,21 +18,18 @@ class BackupDAOImpl(val sqlClient: SQLClient) : BackupDAO {
         CREATE TABLE IF NOT EXISTS Backups (Id integer identity primary key,
         Title varchar(255),
         Filename varchar(255) unique,
-        CreatedAt date)
+        CreatedAt datetime)
         """
 
     private val getLatest = """
-        SELECT Id, Title, Filename
+        SELECT Id, Title, Filename, CreatedAt
         FROM Backups
         INNER JOIN(
-            SELECT  Title as tt,
-                    MAX(CreatedAt) as mx
+            SELECT MAX(id) as mxId
             FROM Backups
             WHERE Backups.Title = ?
-            GROUP BY Title
-            ) maxDates
-        ON Backups.Title = maxDates.tt
-            AND Backups.CreatedAt = maxDates.mx
+            ) latest
+        ON Backups.id = latest.mxId
         """
 
     private val save = """

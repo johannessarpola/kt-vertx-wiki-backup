@@ -52,21 +52,19 @@ class BackupServiceImpl(private val io: BackupIO,
         val params = JsonArray().add(title)
         dao.latest(params,
                 success = { result ->
-
                     if (result.numRows == 0) {
                         fetchFailed(resultHandler)
                     } else {
                         val response = JsonObject()
                         val row = result.getResults().get(0)
-                        val id = row.getInteger(0)
                         val backupName = row.getString(2)
+                        val createdAt = row.getInstant(3) // todo could be date from dao already
 
                         io.getBackupContent(title, backupName, Handler { ar ->
                             if (ar.succeeded()) {
-                                response.put("id", id)
-                                        .put("title", title)
-                                        .put("file", backupName)
-                                        .put("content", ar.result())
+                                response.put("title", title)
+                                        .put("markdown", ar.result())
+                                        .put("date", createdAt)
                                         .put("found", true)
                                 resultHandler.handle(Future.succeededFuture(response))
                             } else {
@@ -89,7 +87,7 @@ class BackupServiceImpl(private val io: BackupIO,
         val sqlDate = java.sql.Date.valueOf(now.toLocalDate())
         val fn = "${title}_${now.format(FORMAT)}"
         val params = JsonArray().add(title).add(fn).add(sqlDate.toString())
-        // todo need a proper way to configure file store here
+
         dao.save(params,
                 success = { ->
                     val response = JsonObject()

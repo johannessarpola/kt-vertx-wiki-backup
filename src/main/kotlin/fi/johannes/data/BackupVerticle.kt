@@ -51,7 +51,7 @@ class BackupVerticle:AbstractVerticle() {
             bind<BackupIO>() with singleton {
                 BackupIOImpl(
                         config().getString(CONFIG_BACKUPS_FILE_STORE, "tmp"),
-                        config().getString(CONFIG_BACKUPS_FILE_STORE_FORMAT, "txt")
+                        config().getString(CONFIG_BACKUPS_FILE_STORE_FORMAT, "md")
                 )
             }
         }

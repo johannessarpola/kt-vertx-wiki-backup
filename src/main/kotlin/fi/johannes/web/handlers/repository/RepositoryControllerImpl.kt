@@ -30,13 +30,9 @@ class RepositoryControllerImpl(private val components: RepositoryControllerCompo
         components.backupService().fetchPage(title, Handler { ar ->
             if(ar.succeeded()) {
                 val result = ar.result()
-                val response = when(result.getBoolean("found")) {
-                    false -> JsonObject().put("found", false)
-                    true -> JsonObject().put("found", true) // todo handle found
-                }
                 context.response()
                         .putHeader("content-type", "application/json; charset=utf-8")
-                        .end(response.encode())
+                        .end(result.encode())
             }
             else {
                 context.fail(ar.cause())

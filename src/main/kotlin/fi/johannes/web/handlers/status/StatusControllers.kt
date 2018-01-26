@@ -2,7 +2,6 @@ package fi.johannes.web.handlers.status
 
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.bind
-import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.singleton
 import fi.johannes.web.handlers.status.controllers.StatusController
 import fi.johannes.web.handlers.status.controllers.StatusControllerImpl
@@ -13,7 +12,7 @@ import fi.johannes.web.handlers.status.controllers.StatusControllerImpl
 class StatusControllers() {
 
     val injector = Kodein {
-        bind<StatusController>() with singleton { StatusControllerImpl(instance()) }
+        bind<StatusController>() with singleton { StatusControllerImpl() }
     }
 
 }

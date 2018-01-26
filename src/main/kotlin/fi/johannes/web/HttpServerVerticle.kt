@@ -2,9 +2,10 @@ package fi.johannes.web
 
 import com.github.salomonbrys.kodein.*
 import fi.johannes.data.services.proxy.BackupService
-import fi.johannes.web.handlers.RepositoryControllers
-import fi.johannes.web.handlers.repository.RepositoryController
-import fi.johannes.web.handlers.status.StatusController
+import fi.johannes.web.handlers.repository.BackupControllers
+import fi.johannes.web.handlers.repository.controllers.RepositoryController
+import fi.johannes.web.handlers.status.StatusControllers
+import fi.johannes.web.handlers.status.controllers.StatusController
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.logging.Logger
@@ -47,18 +48,18 @@ class HttpServerVerticle : AbstractVerticle() {
         val router = Router.router(vertx)
         setupRouter(router)
 
-        val portNumber = config().getInteger(CONFIG_HTTP_SERVER_PORT, 8090);
+        val portNumber = config().getInteger(CONFIG_HTTP_SERVER_PORT, 8090)
         server
                 .requestHandler(router::accept)
                 .listen(portNumber, { ar ->
                     if (ar.succeeded()) {
-                        logger.info("HTTP server running on port " + portNumber);
-                        startFuture.complete();
+                        logger.info("HTTP server running on port " + portNumber)
+                        startFuture.complete()
                     } else {
-                        logger.error("Could not start a HTTP server", ar.cause());
-                        startFuture.fail(ar.cause());
+                        logger.error("Could not start a HTTP server", ar.cause())
+                        startFuture.fail(ar.cause())
                     }
-                });
+                })
     }
 
     override fun stop(stopFuture: Future<Void>) {
@@ -71,18 +72,31 @@ class HttpServerVerticle : AbstractVerticle() {
                 .build(BackupService::class.java)
     }
 
+    private fun backupRouter(): Router {
+        val backupRouter = Router.router(vertx)
+        val backupControllers = BackupControllers(getBackupService())
+        val repositoryController = backupControllers.injector.instance<RepositoryController>()
+
+        backupRouter.get("/:title/latest/").handler(repositoryController::get)
+        backupRouter.post().handler(BodyHandler.create())
+        backupRouter.post("/save").handler(repositoryController::save)
+
+        return backupRouter
+    }
+
+    private fun statusRouter(): Router {
+        val statusRouter = Router.router(vertx)
+        val statusControllers = StatusControllers()
+        val statusController = statusControllers.injector.instance<StatusController>()
+
+        statusRouter.get("/service-status").handler(statusController::get)
+
+        return statusRouter
+    }
+
     private fun setupRouter(router: Router): Router {
-
-        val controllers = RepositoryControllers(getBackupService())
-
-        val repositoryController = controllers.injector.instance<RepositoryController>()
-        val statusController = controllers.injector.instance<StatusController>()
-
-        router.get("/backups/:title/latest/").handler(repositoryController::get)
-        router.get("/backups/service-status").handler(statusController::get)
-        router.post().handler(BodyHandler.create())
-        router.post("/backups/save").handler(repositoryController::save)
-
+        router.mountSubRouter("/backup", backupRouter())
+        router.mountSubRouter("/monitor", statusRouter())
         return router
     }
 

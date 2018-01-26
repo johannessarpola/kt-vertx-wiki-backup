@@ -1,4 +1,4 @@
-package fi.johannes.web.handlers.repository
+package fi.johannes.web.handlers.repository.controllers
 
 import io.vertx.ext.web.RoutingContext
 

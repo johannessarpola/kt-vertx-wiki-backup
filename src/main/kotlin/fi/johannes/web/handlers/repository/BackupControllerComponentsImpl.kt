@@ -1,11 +1,11 @@
-package fi.johannes.web.handlers
+package fi.johannes.web.handlers.repository
 
 import fi.johannes.data.services.proxy.BackupService
 
 /**
  * Johannes on 14.1.2018.
  */
-class RepositoryControllerComponentsImpl(private val backupService: BackupService): RepositoryControllerComponents {
+class BackupControllerComponentsImpl(private val backupService: BackupService): BackupControllerComponents {
 
     override fun backupService(): BackupService {
         return backupService

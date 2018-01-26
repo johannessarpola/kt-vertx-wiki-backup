@@ -29,7 +29,7 @@ class AppVerticle : AbstractVerticle() {
             val httpDeployment: Future<String> = Future.future<String>()
             vertx.deployVerticle(
                     "fi.johannes.web.HttpServerVerticle",
-                    DeploymentOptions().setInstances(2),
+                    DeploymentOptions().setInstances(1),
                     httpDeployment.completer())
             httpDeployment
         }.setHandler { ar ->
